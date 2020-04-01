@@ -51,10 +51,7 @@ public class StudentRegistration extends javax.swing.JFrame {
         
         // display data in the text area
         displayData();
-        
-//        // store student data in the database
-//        storeData();
-        
+                
     }
 
     /**
@@ -205,6 +202,7 @@ public class StudentRegistration extends javax.swing.JFrame {
         db.deleteStudent(removeStudent);
         studentList.remove(removeStudent);
         System.out.print(manager.head);
+        
         displayData();
     }//GEN-LAST:event_deleteButtonActionPerformed
 
@@ -219,6 +217,7 @@ public class StudentRegistration extends javax.swing.JFrame {
         manager.addItem(fname, lname, degree, major);
         db.addStudent(addedStudent); // adds student to database
         studentList.add(addedStudent);
+        
         displayData();
 //        storeData();
     }//GEN-LAST:event_addButtonActionPerformed
@@ -277,36 +276,30 @@ public class StudentRegistration extends javax.swing.JFrame {
     private javax.swing.JButton writeButton;
     // End of variables declaration//GEN-END:variables
 
- public void displayData ()
-    {
-        for (int i = 0; i< studentList.size(); i++)
-        {
-            display.append(studentList.get(i).toString()+"\n");
-        }
- }//end displayData
- 
-  public void storeData()
-  {
-      // create table in the database
-      db.create();
-      
-      // store each Student Record in the table
-      for (int i = 0; i<studentList.size(); i++){
-            StudentRecord tempNode = studentList.get(i);
-            db.addStudent(tempNode);
+    public void displayData (){
+        display.setText(""); // Clears the Text Area.
+        manager.printList(display);
+    }//end displayData
 
-      }
-    
-  }//end storeData
-  public void removeData() {
-      db.create();
-      
-      for (int i = 0; i<studentList.size(); i++){
-          StudentRecord tempNode = studentList.get(i);
-          db.deleteStudent(tempNode);
-      }
-  }
- 
+     public void storeData() {
+        // create table in the database
+        db.create();
+
+        // store each Student Record in the table
+        for (int i = 0; i<studentList.size(); i++){
+              StudentRecord tempNode = studentList.get(i);
+              db.addStudent(tempNode);
+        }
+    }//end storeData
+  
+    public void removeData() {
+        db.create();
+
+        for (int i = 0; i<studentList.size(); i++){
+            StudentRecord tempNode = studentList.get(i);
+            db.deleteStudent(tempNode);
+        }
+    }
  
     //the method reads info from the input XML file, and then stores it
     public void readFile(String filename){
@@ -316,7 +309,7 @@ public class StudentRegistration extends javax.swing.JFrame {
             DocumentBuilder builder = builderFactory.newDocumentBuilder();
             Document document = builder.parse(new File(filename));
             NodeList list = document.getElementsByTagName("student");
-           
+
             //This for loop gathers all the student attributes, puts them in a StudentRecord object
             for(int i = 0; i < list.getLength(); i++){ 
                 Element element = (Element)list.item(i);
@@ -325,10 +318,10 @@ public class StudentRegistration extends javax.swing.JFrame {
                 String xmlLastName = getLastName(element);
                 String xmlMajor = getMajor(element);
                 StudentRecord student = new StudentRecord(xmlFirstName, xmlLastName, xmlDegreeStatus, xmlMajor);
-
+                manager.insert(student);
                 studentList.add(student);                
-            } //end for loop loading the studentArray[] with full student records
-            
+            } //end for loop loading with full student records
+
         }//end try block
         catch (ParserConfigurationException parserException)
         {
@@ -342,40 +335,58 @@ public class StudentRegistration extends javax.swing.JFrame {
         {
             ioException.printStackTrace();
         }//end catch block
-       
+
     }//end readFile()
     
     public void writeFile(String filename) {
-        try{ 
+        try { 
             DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
             builderFactory.setValidating(true);
             DocumentBuilder builder = builderFactory.newDocumentBuilder();
-            Document document = builder.parse(new File(filename));
-            NodeList list = document.getElementsByTagName("student");
-            
             Document doc = builder.newDocument();
             DOMSource in = new DOMSource(doc);
-            FileOutputStream xmlFile = new FileOutputStream("out.xml");
-            
+            FileOutputStream xmlFile = new FileOutputStream("StudentRegistration.xml");
             StreamResult out = new StreamResult(xmlFile);
+           
+            Element rootElement = doc.createElement("StudentRegistrations");
+            doc.appendChild(rootElement);
+           
+            for (int i = 0; i<studentList.size(); i++){
+                           
+                Element student = doc.createElement("Student");
+                rootElement.appendChild(student);
+                
+                String fname = studentList.get(i).getFirstName();
+                String lname = studentList.get(i).getLastName();
+                String degree = studentList.get(i).getDegreeStatus();
+                String major = studentList.get(i).getMajor();
+
+                Element firstname = doc.createElement("FirstName");
+                firstname.appendChild(doc.createTextNode(fname));
+                student.appendChild(firstname);
+                
+                Element lastname = doc.createElement("LastName");
+                lastname.appendChild(doc.createTextNode(lname));
+                student.appendChild(lastname);
+                
+                Element degreeElement = doc.createElement("DegreeStatus");
+                degreeElement.appendChild(doc.createTextNode(degree));
+                student.appendChild(degreeElement);
+                
+                Element majorElement = doc.createElement("Major");
+                majorElement.appendChild(doc.createTextNode(major));
+                student.appendChild(majorElement);
+            }
             
             Transformer transformer = TransformerFactory.newInstance().newTransformer();
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
             transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
-            transformer.transform(in, out);
-            
-            
+            transformer.transform(in, out);     
         }//end try block
-        catch (ParserConfigurationException parserException)
-        {
+        
+        catch (ParserConfigurationException parserException){
             parserException.printStackTrace();   
-        }//end catch block
-        catch (SAXException saxException)
-        {
-            saxException.printStackTrace();
-        }//end catch block
-        catch (IOException ioException)
-        {
+        } catch (IOException ioException) {
             ioException.printStackTrace();
         } catch (TransformerConfigurationException ex) {
             Logger.getLogger(StudentRegistration.class.getName()).log(Level.SEVERE, null, ex);
