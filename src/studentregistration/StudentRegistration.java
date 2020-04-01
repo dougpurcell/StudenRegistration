@@ -1,12 +1,18 @@
 package studentregistration;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.*;
+import javax.xml.transform.dom.*;
+import javax.xml.transform.stream.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -71,6 +77,7 @@ public class StudentRegistration extends javax.swing.JFrame {
         studentMajor = new javax.swing.JTextField();
         addButton = new javax.swing.JButton();
         deleteButton = new javax.swing.JButton();
+        writeButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -90,32 +97,12 @@ public class StudentRegistration extends javax.swing.JFrame {
         jScrollPane1.setViewportView(display);
 
         firstName.setText("firstName");
-        firstName.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                firstNameActionPerformed(evt);
-            }
-        });
 
         lastName.setText("lastName");
-        lastName.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                lastNameActionPerformed(evt);
-            }
-        });
 
         degreeStatus.setText("degreeStatus");
-        degreeStatus.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                degreeStatusActionPerformed(evt);
-            }
-        });
 
         studentMajor.setText("studentMajor");
-        studentMajor.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                studentMajorActionPerformed(evt);
-            }
-        });
 
         addButton.setText("Add Record");
         addButton.addActionListener(new java.awt.event.ActionListener() {
@@ -128,6 +115,13 @@ public class StudentRegistration extends javax.swing.JFrame {
         deleteButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 deleteButtonActionPerformed(evt);
+            }
+        });
+
+        writeButton.setText("Write to Student Regisration XML File");
+        writeButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                writeButtonActionPerformed(evt);
             }
         });
 
@@ -160,8 +154,9 @@ public class StudentRegistration extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(deleteButton)
-                            .addComponent(studentMajor, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(188, Short.MAX_VALUE))
+                            .addComponent(studentMajor, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(writeButton))
+                .addContainerGap(178, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -172,7 +167,7 @@ public class StudentRegistration extends javax.swing.JFrame {
                     .addComponent(readButton)
                     .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -185,7 +180,9 @@ public class StudentRegistration extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(addButton)
-                            .addComponent(deleteButton))))
+                            .addComponent(deleteButton))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(writeButton)))
                 .addContainerGap(197, Short.MAX_VALUE))
         );
 
@@ -195,22 +192,6 @@ public class StudentRegistration extends javax.swing.JFrame {
     private void readButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_readButtonActionPerformed
  
     }//GEN-LAST:event_readButtonActionPerformed
-
-    private void firstNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_firstNameActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_firstNameActionPerformed
-
-    private void lastNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lastNameActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_lastNameActionPerformed
-
-    private void degreeStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_degreeStatusActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_degreeStatusActionPerformed
-
-    private void studentMajorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_studentMajorActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_studentMajorActionPerformed
 
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
         String fname = firstName.getText();
@@ -223,6 +204,8 @@ public class StudentRegistration extends javax.swing.JFrame {
         manager.removeItem(fname, lname, degree, major);
         db.deleteStudent(removeStudent);
         studentList.remove(removeStudent);
+        System.out.print(manager.head);
+        displayData();
     }//GEN-LAST:event_deleteButtonActionPerformed
 
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
@@ -234,10 +217,15 @@ public class StudentRegistration extends javax.swing.JFrame {
         StudentRecord addedStudent = new StudentRecord(fname, lname, degree, major);
         
         manager.addItem(fname, lname, degree, major);
+        db.addStudent(addedStudent); // adds student to database
         studentList.add(addedStudent);
         displayData();
-        storeData();
+//        storeData();
     }//GEN-LAST:event_addButtonActionPerformed
+
+    private void writeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_writeButtonActionPerformed
+        writeFile("Students.xml");
+    }//GEN-LAST:event_writeButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -286,6 +274,7 @@ public class StudentRegistration extends javax.swing.JFrame {
     private javax.swing.JLabel promptLabel;
     private javax.swing.JButton readButton;
     private javax.swing.JTextField studentMajor;
+    private javax.swing.JButton writeButton;
     // End of variables declaration//GEN-END:variables
 
  public void displayData ()
@@ -309,12 +298,17 @@ public class StudentRegistration extends javax.swing.JFrame {
       }
     
   }//end storeData
-  
-  public void addData(String f){
+  public void removeData() {
+      db.create();
+      
+      for (int i = 0; i<studentList.size(); i++){
+          StudentRecord tempNode = studentList.get(i);
+          db.deleteStudent(tempNode);
+      }
   }
  
  
-    //the method reads info from the input XML file, and then stores it in the studentArray[] 
+    //the method reads info from the input XML file, and then stores it
     public void readFile(String filename){
         try{
             DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
@@ -350,6 +344,45 @@ public class StudentRegistration extends javax.swing.JFrame {
         }//end catch block
        
     }//end readFile()
+    
+    public void writeFile(String filename) {
+        try{ 
+            DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+            builderFactory.setValidating(true);
+            DocumentBuilder builder = builderFactory.newDocumentBuilder();
+            Document document = builder.parse(new File(filename));
+            NodeList list = document.getElementsByTagName("student");
+            
+            Document doc = builder.newDocument();
+            DOMSource in = new DOMSource(doc);
+            FileOutputStream xmlFile = new FileOutputStream("out.xml");
+            
+            StreamResult out = new StreamResult(xmlFile);
+            
+            Transformer transformer = TransformerFactory.newInstance().newTransformer();
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
+            transformer.transform(in, out);
+            
+            
+        }//end try block
+        catch (ParserConfigurationException parserException)
+        {
+            parserException.printStackTrace();   
+        }//end catch block
+        catch (SAXException saxException)
+        {
+            saxException.printStackTrace();
+        }//end catch block
+        catch (IOException ioException)
+        {
+            ioException.printStackTrace();
+        } catch (TransformerConfigurationException ex) {
+            Logger.getLogger(StudentRegistration.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (TransformerException ex) {
+            Logger.getLogger(StudentRegistration.class.getName()).log(Level.SEVERE, null, ex);
+        }//end catch block
+    } // end writeFile()
 
     //RETURNS THE FIRST NAME OF THE STUDENT
     public String getFirstName(Element parent){ 

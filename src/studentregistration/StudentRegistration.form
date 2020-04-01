@@ -56,8 +56,9 @@
                           <Component id="studentMajor" min="-2" pref="112" max="-2" attributes="0"/>
                       </Group>
                   </Group>
+                  <Component id="writeButton" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="188" max="32767" attributes="0"/>
+              <EmptySpace pref="178" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -71,7 +72,7 @@
                   <Component id="nameField" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
                   <Component id="jScrollPane1" min="-2" pref="186" max="-2" attributes="0"/>
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="3" attributes="0">
@@ -88,6 +89,8 @@
                           <Component id="addButton" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="deleteButton" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Component id="writeButton" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace pref="197" max="32767" attributes="0"/>
@@ -133,33 +136,21 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="firstName"/>
       </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="firstNameActionPerformed"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="lastName">
       <Properties>
         <Property name="text" type="java.lang.String" value="lastName"/>
       </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="lastNameActionPerformed"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="degreeStatus">
       <Properties>
         <Property name="text" type="java.lang.String" value="degreeStatus"/>
       </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="degreeStatusActionPerformed"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="studentMajor">
       <Properties>
         <Property name="text" type="java.lang.String" value="studentMajor"/>
       </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="studentMajorActionPerformed"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="addButton">
       <Properties>
@@ -175,6 +166,14 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="deleteButtonActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="writeButton">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Write to Student Regisration XML File"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="writeButtonActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

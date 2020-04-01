@@ -34,7 +34,7 @@ String filePath = "jdbc:ucanaccess://E:\\griff\\College\\IST411\\hw4\\StudentReg
                          " LastName varchar(255), " + 
                          "DegreeStatus varchar(255), Major varchar(255))");
         
-         System.out.println("Created Students table");
+//         System.out.println("Created Students table");
          
          stmt.close();
          con.close();
@@ -79,7 +79,8 @@ String filePath = "jdbc:ucanaccess://E:\\griff\\College\\IST411\\hw4\\StudentReg
             String major = student.getMajor();
             
             stmt.execute("INSERT INTO students VALUES('" + fName + "','" + lName + "','" + degree + "','" + major + "')");
-
+//            System.out.println("Student Added");
+            
             stmt.close();
             con.close();
         }//end try
@@ -107,7 +108,8 @@ String filePath = "jdbc:ucanaccess://E:\\griff\\College\\IST411\\hw4\\StudentReg
             String major = student.getMajor();
             
             stmt.execute("DELETE * FROM students WHERE FirstName = '" + fName + "' and LastName = '" + lName + "' and DegreeStatus = '" + degree + "' and Major = '" + major + "'");
-
+            System.out.println("Student deleted");
+            
             stmt.close();
             con.close();
         }//end try
