@@ -1,5 +1,6 @@
 package studentregistration;
 
+import java.awt.BorderLayout;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -18,6 +19,15 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel; 
+import org.jfree.chart.JFreeChart; 
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.CategoryDataset; 
+import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.ui.ApplicationFrame; 
+import org.jfree.ui.RefineryUtilities; 
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -51,7 +61,7 @@ public class StudentRegistration extends javax.swing.JFrame {
         
         // display data in the text area
         displayData();
-                
+        
     }
 
     /**
@@ -64,7 +74,6 @@ public class StudentRegistration extends javax.swing.JFrame {
     private void initComponents() {
 
         promptLabel = new javax.swing.JLabel();
-        readButton = new javax.swing.JButton();
         nameField = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         display = new javax.swing.JTextArea();
@@ -75,17 +84,14 @@ public class StudentRegistration extends javax.swing.JFrame {
         addButton = new javax.swing.JButton();
         deleteButton = new javax.swing.JButton();
         writeButton = new javax.swing.JButton();
+        viewBarChart = new javax.swing.JButton();
+        viewPieChart = new javax.swing.JButton();
+        barChart = new javax.swing.JPanel();
+        pieChart = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         promptLabel.setText("Filename:");
-
-        readButton.setText("Read from XML File");
-        readButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                readButtonActionPerformed(evt);
-            }
-        });
 
         nameField.setText("Students.xml");
 
@@ -122,46 +128,92 @@ public class StudentRegistration extends javax.swing.JFrame {
             }
         });
 
+        viewBarChart.setText("View Bar Chart");
+        viewBarChart.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                viewBarChartActionPerformed(evt);
+            }
+        });
+
+        viewPieChart.setText("View Pie Chart");
+        viewPieChart.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                viewPieChartActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pieChartLayout = new javax.swing.GroupLayout(pieChart);
+        pieChart.setLayout(pieChartLayout);
+        pieChartLayout.setHorizontalGroup(
+            pieChartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 612, Short.MAX_VALUE)
+        );
+        pieChartLayout.setVerticalGroup(
+            pieChartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 340, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout barChartLayout = new javax.swing.GroupLayout(barChart);
+        barChart.setLayout(barChartLayout);
+        barChartLayout.setHorizontalGroup(
+            barChartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, barChartLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(pieChart, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        barChartLayout.setVerticalGroup(
+            barChartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(barChartLayout.createSequentialGroup()
+                .addComponent(pieChart, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 354, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(barChart, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addGap(27, 27, 27)
-                        .addComponent(promptLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(34, 34, 34)
-                        .addComponent(readButton)))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(firstName, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lastName, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(degreeStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(addButton))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(27, 27, 27)
+                                .addComponent(promptLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(191, 191, 191))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                        .addComponent(viewBarChart)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(viewPieChart))
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 354, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(deleteButton)
-                            .addComponent(studentMajor, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(writeButton))
-                .addContainerGap(178, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(firstName, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(lastName, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(degreeStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(addButton))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(deleteButton)
+                                    .addComponent(studentMajor, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(writeButton))))
+                .addContainerGap(54, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(20, 20, 20)
+                .addGap(24, 24, 24)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(promptLabel)
-                    .addComponent(readButton)
                     .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -180,15 +232,17 @@ public class StudentRegistration extends javax.swing.JFrame {
                             .addComponent(deleteButton))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(writeButton)))
-                .addContainerGap(197, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(viewBarChart)
+                    .addComponent(viewPieChart))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(barChart, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(182, 182, 182))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void readButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_readButtonActionPerformed
- 
-    }//GEN-LAST:event_readButtonActionPerformed
 
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
         String fname = firstName.getText();
@@ -219,12 +273,19 @@ public class StudentRegistration extends javax.swing.JFrame {
         studentList.add(addedStudent);
         
         displayData();
-//        storeData();
     }//GEN-LAST:event_addButtonActionPerformed
 
     private void writeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_writeButtonActionPerformed
         writeFile("Students.xml");
     }//GEN-LAST:event_writeButtonActionPerformed
+
+    private void viewBarChartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewBarChartActionPerformed
+        studentsInDegrees();
+    }//GEN-LAST:event_viewBarChartActionPerformed
+
+    private void viewPieChartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewPieChartActionPerformed
+        studentsInMajors();
+    }//GEN-LAST:event_viewPieChartActionPerformed
 
     /**
      * @param args the command line arguments
@@ -252,7 +313,7 @@ public class StudentRegistration extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(StudentRegistration.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
+        
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -263,6 +324,7 @@ public class StudentRegistration extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addButton;
+    private javax.swing.JPanel barChart;
     private javax.swing.JTextField degreeStatus;
     private javax.swing.JButton deleteButton;
     private javax.swing.JTextArea display;
@@ -270,15 +332,18 @@ public class StudentRegistration extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField lastName;
     private javax.swing.JTextField nameField;
+    private javax.swing.JPanel pieChart;
     private javax.swing.JLabel promptLabel;
-    private javax.swing.JButton readButton;
     private javax.swing.JTextField studentMajor;
+    private javax.swing.JButton viewBarChart;
+    private javax.swing.JButton viewPieChart;
     private javax.swing.JButton writeButton;
     // End of variables declaration//GEN-END:variables
 
     public void displayData (){
         display.setText(""); // Clears the Text Area.
         manager.printList(display);
+        
     }//end displayData
 
      public void storeData() {
@@ -290,6 +355,7 @@ public class StudentRegistration extends javax.swing.JFrame {
               StudentRecord tempNode = studentList.get(i);
               db.addStudent(tempNode);
         }
+
     }//end storeData
   
     public void removeData() {
@@ -422,4 +488,116 @@ public class StudentRegistration extends javax.swing.JFrame {
         Node childTextNode = child.item(0).getFirstChild();
         return childTextNode.getNodeValue();  
     }//end getFirstName
+    
+    // Calculations for Charts
+    public void studentsInDegrees() {
+//        System.out.println(studentList.size());
+        
+        int fullTime = 0;
+        int partTime = 0;
+        int nondegree = 0;
+        int provisional = 0;
+        int other = 0;
+        
+        for (int i = 0; i < studentList.size(); i++) {
+            if (studentList.get(i).getDegreeStatus().equals("FullTime")) {
+                fullTime++;
+            } 
+            else if (studentList.get(i).getDegreeStatus().equals("PartTime")) {
+                partTime++;
+            } 
+            else if (studentList.get(i).getDegreeStatus().equals("NonDegree")) {
+                nondegree++;
+            } 
+            else if (studentList.get(i).getDegreeStatus().equals("Provisional")) {
+                provisional++;
+            }
+            else {
+                other++;
+            }
+        }
+        
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        dataset.addValue(fullTime, "Full Time", "Full Time");
+        dataset.addValue(partTime, "Part Time", "Part Time");
+        dataset.addValue(nondegree, "Non Degree", "Non Degree");
+        dataset.addValue(provisional, "Provisional", "Provisional");
+        dataset.addValue(other, "Other", "Other");
+        
+        JFreeChart chart = ChartFactory.createBarChart(
+            "Students In Degrees",
+            "Degrees", 
+            "Students", 
+            dataset, 
+            PlotOrientation.VERTICAL, 
+            true, true, false);
+        
+        ChartPanel chartPanel = new ChartPanel(chart);
+        chartPanel.setPreferredSize(new java.awt.Dimension( 600 , 450 ) ); 
+        
+        barChart.setLayout(new java.awt.BorderLayout());
+        barChart.add(chartPanel, BorderLayout.CENTER);
+        barChart.validate();
+        
+//        System.out.println(fullTime);
+//        System.out.println(partTime);
+//        System.out.println(nondegree);
+//        System.out.println(provisional);
+//        System.out.println(other); 
+    }
+    
+    public void studentsInMajors() {
+        
+        int business = 0;
+        int ist = 0;
+        int nursing = 0;
+        int hdfs = 0;
+        int other = 0;
+        
+        for (int i = 0; i < studentList.size(); i++) {
+            if (studentList.get(i).getMajor().equals("Business")) {
+                business++;
+            } 
+            else if (studentList.get(i).getMajor().equals("IST")) {
+                ist++;
+            } 
+            else if (studentList.get(i).getMajor().equals("Nursing")) {
+                nursing++;
+            } 
+            else if (studentList.get(i).getMajor().equals("HDFS")) {
+                hdfs++;
+            }
+            else {
+                other++;
+            }
+        }
+        double bizPercent = (double)business/studentList.size();
+        double istPercent = (double)ist/studentList.size();
+        double nursingPercent = (double)nursing/studentList.size();
+        double hdfsPercent = (double)hdfs/studentList.size();
+        double otherPercent = (double)other/studentList.size();
+  
+        DefaultPieDataset dataset = new DefaultPieDataset();
+        dataset.setValue("Business", bizPercent);
+        dataset.setValue("IST", istPercent);
+        dataset.setValue("Nursing", nursingPercent);
+        dataset.setValue("HDFS", hdfsPercent);
+        dataset.setValue("Other", otherPercent);
+        
+        JFreeChart pie = ChartFactory.createPieChart(
+            "Students in Majors",
+            dataset, 
+            true, true, false);
+        ChartPanel chartPanel = new ChartPanel(pie);
+        
+        pieChart.setLayout(new java.awt.BorderLayout());
+        pieChart.add(chartPanel, BorderLayout.CENTER);
+        pieChart.validate();
+        
+//        System.out.println(bizPercent);
+//        System.out.println(istPercent);
+//        System.out.println(nursingPercent);
+//        System.out.println(hdfsPercent);
+//        System.out.println(otherPercent);   
+    }
 }

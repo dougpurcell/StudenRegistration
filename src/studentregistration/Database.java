@@ -108,7 +108,7 @@ String filePath = "jdbc:ucanaccess://E:\\griff\\College\\IST411\\hw4\\StudentReg
             String major = student.getMajor();
             
             stmt.execute("DELETE * FROM students WHERE FirstName = '" + fName + "' and LastName = '" + lName + "' and DegreeStatus = '" + degree + "' and Major = '" + major + "'");
-            System.out.println("Student deleted");
+//            System.out.println("Student deleted");
             
             stmt.close();
             con.close();

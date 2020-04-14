@@ -68,7 +68,7 @@ public class StudentManager {
             ){
             head = head.getNext();
 
-            System.out.println("IF");
+//            System.out.println("IF");
         }
 
         else {
@@ -81,7 +81,7 @@ public class StudentManager {
             (removeNode.getMajor().equals(nextNode.getMajor())))  ){
                 prevNode = nextNode;
                 nextNode = nextNode.getNext();
-                System.out.println("ELSE - WHILE");
+//                System.out.println("ELSE - WHILE");
             }
 
             if ( (removeNode.getFirstName().compareTo(nextNode.getFirstName()) == 0) &&
@@ -90,7 +90,7 @@ public class StudentManager {
             (removeNode.getMajor().equals(nextNode.getMajor())) )
             {
                 prevNode.setNext(nextNode.getNext());
-                System.out.println("ELSE - IF");
+//                System.out.println("ELSE - IF");
             }
             else {
                 JOptionPane.showMessageDialog(null, "NOT FOUND - Information did not match", "NOT FOUND", JOptionPane.INFORMATION_MESSAGE);
