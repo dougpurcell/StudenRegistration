@@ -549,7 +549,7 @@ public class StudentRegistration extends javax.swing.JFrame {
         dataset.addValue(other, "Other", "Other");
         
         JFreeChart chart = ChartFactory.createBarChart(
-            "Students In Degrees",
+            "Students Degree Status",
             "Degrees", 
             "Students", 
             dataset, 
