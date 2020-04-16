@@ -66,10 +66,4 @@
         <DegreeStatus>PartTime</DegreeStatus>
         <Major>HDFS</Major>
     </Student>
-    <Student>
-        <FirstName>firstName</FirstName>
-        <LastName>lastName</LastName>
-        <DegreeStatus>degreeStatus</DegreeStatus>
-        <Major>studentMajor</Major>
-    </Student>
 </StudentRegistrations>

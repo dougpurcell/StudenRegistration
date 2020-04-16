@@ -123,7 +123,40 @@ String filePath = "jdbc:ucanaccess://E:\\griff\\College\\IST411\\hw4\\StudentReg
             Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//end deleteStudent()
-      
+    public StudentRecord updateFromDatabase(){
+        StudentRecord student = new StudentRecord("","","","");
+        try { 
+            // load database driver class
+            Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
+            // connect to database
+            Connection con = DriverManager.getConnection(filePath);
+         
+            Statement stmt = con.createStatement();
+            
+            ResultSet rs = stmt.executeQuery("SELECT * FROM Students");
+            
+            while(rs.next()) {
+                if (rs.isLast()) {
+                    student.setFirstName(rs.getString("FirstName"));
+                    student.setLastName(rs.getString("LastName"));
+                    student.setDegreeStatus(rs.getString("DegreeStatus"));
+                    student.setMajor(rs.getString("Major"));
+                }
+            }
+            rs.close();
+            con.close();
+        }//end try
+        catch ( SQLException sqlException ) {
+            JOptionPane.showMessageDialog( null, 
+            sqlException.getMessage(), "Database Error",
+            JOptionPane.ERROR_MESSAGE );
+            System.exit( 1 );
+        } 
+        catch (ClassNotFoundException ex) {
+            Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return student;
+    }  // end displayData()
 }// end Database class
     
 

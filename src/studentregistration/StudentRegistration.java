@@ -23,11 +23,8 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel; 
 import org.jfree.chart.JFreeChart; 
 import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.data.category.CategoryDataset; 
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
-import org.jfree.ui.ApplicationFrame; 
-import org.jfree.ui.RefineryUtilities; 
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -88,6 +85,7 @@ public class StudentRegistration extends javax.swing.JFrame {
         viewPieChart = new javax.swing.JButton();
         barChart = new javax.swing.JPanel();
         pieChart = new javax.swing.JPanel();
+        refreshDisplay = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -168,6 +166,13 @@ public class StudentRegistration extends javax.swing.JFrame {
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
+        refreshDisplay.setText("Refresh Display from Database");
+        refreshDisplay.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                refreshDisplayActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -205,7 +210,10 @@ public class StudentRegistration extends javax.swing.JFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(deleteButton)
                                     .addComponent(studentMajor, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(writeButton))))
+                            .addComponent(writeButton)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(17, 17, 17)
+                                .addComponent(refreshDisplay)))))
                 .addContainerGap(54, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -216,7 +224,7 @@ public class StudentRegistration extends javax.swing.JFrame {
                     .addComponent(promptLabel)
                     .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -230,8 +238,10 @@ public class StudentRegistration extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(addButton)
                             .addComponent(deleteButton))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(writeButton)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(writeButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(refreshDisplay)))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(viewBarChart)
@@ -255,7 +265,7 @@ public class StudentRegistration extends javax.swing.JFrame {
         manager.removeItem(fname, lname, degree, major);
         db.deleteStudent(removeStudent);
         studentList.remove(removeStudent);
-        System.out.print(manager.head);
+//        System.out.print(manager.head);
         
         displayData();
     }//GEN-LAST:event_deleteButtonActionPerformed
@@ -286,6 +296,19 @@ public class StudentRegistration extends javax.swing.JFrame {
     private void viewPieChartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewPieChartActionPerformed
         studentsInMajors();
     }//GEN-LAST:event_viewPieChartActionPerformed
+
+    private void refreshDisplayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshDisplayActionPerformed
+//        db.updateFromDatabase();
+        manager.addItem(
+            db.updateFromDatabase().getFirstName(), 
+            db.updateFromDatabase().getLastName(), 
+            db.updateFromDatabase().getDegreeStatus(), 
+            db.updateFromDatabase().getMajor()
+        );
+        studentList.add(db.updateFromDatabase());
+        
+        displayData();
+    }//GEN-LAST:event_refreshDisplayActionPerformed
 
     /**
      * @param args the command line arguments
@@ -334,6 +357,7 @@ public class StudentRegistration extends javax.swing.JFrame {
     private javax.swing.JTextField nameField;
     private javax.swing.JPanel pieChart;
     private javax.swing.JLabel promptLabel;
+    private javax.swing.JButton refreshDisplay;
     private javax.swing.JTextField studentMajor;
     private javax.swing.JButton viewBarChart;
     private javax.swing.JButton viewPieChart;
